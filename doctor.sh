@@ -50,7 +50,7 @@ mkdir meta; mkdir cron; mkdir appdata; mkdir media; mkdir self-meta
 # meta reports
 cd "$OUTPUTDIR/meta"
 
-SECTION_TIMER="$(date +%s%3N%3N)" # reset timer
+SECTION_TIMER="$(date +%s%3N)" # reset timer
 
 echo "running meta reports (date, path, system, hostname, ip)..."
 
@@ -67,7 +67,7 @@ echo "finished meta reports"
 # cron reports
 cd "$OUTPUTDIR/cron"
 
-SECTION_TIMER="$(date +%s%3N%3N)" # reset timer
+SECTION_TIMER="$(date +%s%3N)" # reset timer
 
 echo "running cron reports..."
 
@@ -81,7 +81,7 @@ echo "finished cron reports"
 # appdata reports
 cd "$OUTPUTDIR/appdata"
 
-SECTION_TIMER="$(date +%s%3N%3N)" # reset timer
+SECTION_TIMER="$(date +%s%3N)" # reset timer
 
 echo "running appdata reports..."
 
@@ -97,7 +97,7 @@ echo "finished appdata reports"
 # media reports
 cd "$OUTPUTDIR/media"
 
-SECTION_TIMER="$(date +%s%3N%3N)" # reset timer
+SECTION_TIMER="$(date +%s%3N)" # reset timer
 
 echo "running media reports..."
 
