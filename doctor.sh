@@ -4,24 +4,27 @@ TIMER="$(date +%s%3N)"
 
 # check required dependencies are installed
 
-dep_installed()
-{
-  command -v "$1" >/dev/null 2>&1
-}
+DEPCHECK="${DEPCHECK:=true}"
+if [[ $DEPCHECK == "true" ]]; then
+    dep_installed()
+    {
+        command -v "$1" >/dev/null 2>&1
+    }
 
-if ! dep_installed git; then
-    echo "git not installed (attempting installation via apt-get)..."
-    sudo apt-get --yes install git
-fi
+    if ! dep_installed git; then
+        echo "git not installed (attempting installation via apt-get)..."
+        sudo apt-get --yes install git
+    fi
 
-if ! dep_installed tree; then
-    echo "tree not installed (attempting installation via apt-get)..."
-    sudo apt-get --yes install tree
-fi
+    if ! dep_installed tree; then
+        echo "tree not installed (attempting installation via apt-get)..."
+        sudo apt-get --yes install tree
+    fi
 
-if ! dep_installed docker; then
-    echo "it looks like Docker is not installed. visit this URL to install: https://docs.docker.com/engine/install/"
-    exit
+    if ! dep_installed docker; then
+        echo "it looks like Docker is not installed. visit this URL to install: https://docs.docker.com/engine/install/"
+        exit
+    fi
 fi
 
 # if updating...
