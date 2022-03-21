@@ -1,6 +1,6 @@
 # doctor
 
-A tool to capture an "analytics snapshot" of the schlobohm.one infrastructure. In case the Reds decide to push the button down.
+A tool to capture an "analytics snapshot" of the `schlobohm.one` infrastructure. [In case the Reds decide to push the button down](https://youtu.be/yi4hbVAfRCw).
 
 ## Installation
 
