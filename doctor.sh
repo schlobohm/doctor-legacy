@@ -40,7 +40,7 @@ cd "$OUTPUTDIR/cron"
 echo "running cron reports..."
 
 cp /etc/crontab .
-find /var/spool/cron/crontabs/ -type f -exec cp "{}" . \;
+sudo find /var/spool/cron/crontabs/ -type f -exec cp "{}" . \;
 
 echo "finished cron reports"
 
@@ -51,8 +51,8 @@ echo "running appdata reports..."
 
 tree -alnsDF /mnt/appdata -o "files.tree"
 
-docker ps -a -s > "docker_ps_-a_-s.log"
-docker inspect $(docker ps -q) > "docker_inspect_(docker_ps_-q).log"
+sudo docker ps -a -s > "docker_ps_-a_-s.log"
+sudo docker inspect $(docker ps -q) > "docker_inspect_(docker_ps_-q).log"
 
 echo "finished appdata reports"
 
