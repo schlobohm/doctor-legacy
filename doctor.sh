@@ -24,7 +24,7 @@ fi
 
 # if updating...
 
-if [ $1 = "update" ]; then
+if [[ $1 == "update" ]]; then
     echo "updating..."
     cd "$(dirname $(realpath $0))"
     sudo git fetch origin 1>/dev/null
