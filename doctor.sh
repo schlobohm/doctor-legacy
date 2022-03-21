@@ -1,5 +1,17 @@
 #!/bin/sh
 
+# if updating...
+
+if [ $1 = "update" ]; then
+    echo "updating..."
+    cd "$(dirname $(realpath $0))"
+    sudo git fetch origin 1>/dev/null
+    sudo git reset --hard HEAD 1>/dev/null
+    echo "finished updating"
+fi
+
+# else, continue...
+
 STAMP="$(date +'%Y%m%d_%H%M%S')"
 
 # sudo check
