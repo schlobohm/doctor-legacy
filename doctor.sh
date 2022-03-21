@@ -58,7 +58,6 @@ mkdir -p "$OUTPUTDIR" && cd $OUTPUTDIR
 mkdir meta; mkdir cron; mkdir appdata; mkdir media; mkdir self-meta
 
 # meta reports
-
 if [[ "$RUN" == "all" || "$RUN" == *"meta"* ]]; then
     cd "$OUTPUTDIR/meta"
 
