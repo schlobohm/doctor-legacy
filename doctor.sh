@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 TIMER="$(date +%s%3N)"
 
