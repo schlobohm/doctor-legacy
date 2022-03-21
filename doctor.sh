@@ -7,6 +7,7 @@ if [ $1 = "update" ]; then
     cd "$(dirname $(realpath $0))"
     sudo git fetch origin 1>/dev/null
     sudo git reset --hard HEAD 1>/dev/null
+    sudo chmod +x "$(realpath $0)"
     echo "finished updating"
     exit
 fi
