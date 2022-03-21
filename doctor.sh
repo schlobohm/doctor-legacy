@@ -1,5 +1,26 @@
 #!/bin/sh
 
+# check required dependencies are installed
+
+dep_installed()
+{
+  command -v "$1" >/dev/null 2>&1
+}
+
+echo "checking if dependencies are installed (will attempt installation via apt-get as necessary)..."
+if ! dep_installed git; then
+    sudo apt-get --yes install git
+fi
+
+if ! dep_installed tree; then
+    sudo apt-get --yes install tree
+fi
+
+if ! dep_installed docker; then
+    echo "it looks like Docker is not installed. visit this URL to install: https://docs.docker.com/engine/install/"
+    exit
+fi
+
 # if updating...
 
 if [ $1 = "update" ]; then
