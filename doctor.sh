@@ -7,12 +7,13 @@ dep_installed()
   command -v "$1" >/dev/null 2>&1
 }
 
-echo "checking if dependencies are installed (will attempt installation via apt-get as necessary)..."
 if ! dep_installed git; then
+    echo "git not installed (attempting installation via apt-get)..."
     sudo apt-get --yes install git
 fi
 
 if ! dep_installed tree; then
+    echo "tree not installed (attempting installation via apt-get)..."
     sudo apt-get --yes install tree
 fi
 
