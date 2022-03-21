@@ -88,7 +88,7 @@ if [[ "$RUN" == "all" || "$RUN" == *"cron"* ]]; then
     cp /etc/crontab .
     sudo find /var/spool/cron/crontabs/ -type f -exec cp "{}" . \;
 
-    echo "cron $(($(date +%s%3N) - $SECTION_TIMER))" > "$OUTPUTDIR/self-meta/duration"
+    echo "cron $(($(date +%s%3N) - $SECTION_TIMER))" >> "$OUTPUTDIR/self-meta/duration"
 
     echo "finished cron reports"
 fi
