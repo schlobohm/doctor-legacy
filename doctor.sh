@@ -16,9 +16,6 @@ fi
 
 STAMP="$(date +'%Y%m%d_%H%M%S')"
 
-# sudo check
-# [ "$UID" -eq 0 ] || exec sudo bash "$0" "$@"
-
 OUTPUTDIR="$HOME/sbone-doctor/$STAMP"
 
 mkdir -p "$OUTPUTDIR" && cd $OUTPUTDIR
