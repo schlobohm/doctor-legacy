@@ -8,6 +8,7 @@ if [ $1 = "update" ]; then
     sudo git fetch origin 1>/dev/null
     sudo git reset --hard HEAD 1>/dev/null
     echo "finished updating"
+    exit
 fi
 
 # else, continue...
