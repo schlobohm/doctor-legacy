@@ -64,3 +64,12 @@ echo "running media reports..."
 tree -alnsDF -I "xrated" /mnt/media -o "files.tree"
 
 echo "finished media reports"
+
+# HTML
+cd "$OUTPUTDIR/"
+
+echo "creating HTML index file..."
+
+tree -H "$OUTPUTDIR" -o "index.html"
+
+echo "finished creating HTML index file"
