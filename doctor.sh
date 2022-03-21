@@ -38,7 +38,9 @@ fi
 
 STAMP="$(date +'%Y%m%d_%H%M%S')"
 
-OUTPUTDIR="$HOME/sbone-doctor/$STAMP"
+BASEDIR="${BASEDIR:=$HOME/sbone-doctor}"
+
+OUTPUTDIR="${OUTPUTDIR:=$BASEDIR/$STAMP}"
 
 mkdir -p "$OUTPUTDIR" && cd $OUTPUTDIR
 mkdir meta; mkdir cron; mkdir appdata; mkdir media
