@@ -4,24 +4,27 @@ TIMER="$(date +%s%3N)"
 
 # check required dependencies are installed
 
-dep_installed()
-{
-  command -v "$1" >/dev/null 2>&1
-}
+DEPCHECK="${DEPCHECK:=true}"
+if [[ $DEPCHECK == "true" ]]; then
+    dep_installed()
+    {
+        command -v "$1" >/dev/null 2>&1
+    }
 
-if ! dep_installed git; then
-    echo "git not installed (attempting installation via apt-get)..."
-    sudo apt-get --yes install git
-fi
+    if ! dep_installed git; then
+        echo "git not installed (attempting installation via apt-get)..."
+        sudo apt-get --yes install git
+    fi
 
-if ! dep_installed tree; then
-    echo "tree not installed (attempting installation via apt-get)..."
-    sudo apt-get --yes install tree
-fi
+    if ! dep_installed tree; then
+        echo "tree not installed (attempting installation via apt-get)..."
+        sudo apt-get --yes install tree
+    fi
 
-if ! dep_installed docker; then
-    echo "it looks like Docker is not installed. visit this URL to install: https://docs.docker.com/engine/install/"
-    exit
+    if ! dep_installed docker; then
+        echo "it looks like Docker is not installed. visit this URL to install: https://docs.docker.com/engine/install/"
+        exit
+    fi
 fi
 
 # if updating...
@@ -38,6 +41,13 @@ fi
 
 # else, continue...
 
+# note: could/should this be replaced with parameter expansion?
+if [ -n "$1" ]; then
+  RUN=$1
+else
+  RUN="all"
+fi
+
 STAMP="$(date +'%Y%m%d_%H%M%S')"
 
 BASEDIR="${BASEDIR:=$HOME/sbone-doctor}"
@@ -48,73 +58,84 @@ mkdir -p "$OUTPUTDIR" && cd $OUTPUTDIR
 mkdir meta; mkdir cron; mkdir appdata; mkdir media; mkdir self-meta
 
 # meta reports
-cd "$OUTPUTDIR/meta"
 
-SECTION_TIMER="$(date +%s%3N)" # reset timer
+if [[ "$RUN" == "all" || "$RUN" == *"meta"* ]]; then
+    cd "$OUTPUTDIR/meta"
 
-echo "running meta reports (date, path, system, hostname, ip)..."
+    SECTION_TIMER="$(date +%s%3N)" # reset timer
 
-date > "date"
-echo "$0" > "path"
-uname -a > "system"
-hostname > "hostname"
-hostname -I > "ip"
+    echo "running meta reports (date, path, system, hostname, ip)..."
 
-echo "meta $(($(date +%s%3N) - $SECTION_TIMER))" > "$OUTPUTDIR/self-meta/duration"
+    date > "date"
+    echo "$0" > "path"
+    uname -a > "system"
+    hostname > "hostname"
+    hostname -I > "ip"
 
-echo "finished meta reports"
+    echo "meta $(($(date +%s%3N) - $SECTION_TIMER))" >> "$OUTPUTDIR/self-meta/duration"
+
+    echo "finished meta reports"
+fi
 
 # cron reports
-cd "$OUTPUTDIR/cron"
+if [[ "$RUN" == "all" || "$RUN" == *"cron"* ]]; then
+    cd "$OUTPUTDIR/cron"
 
-SECTION_TIMER="$(date +%s%3N)" # reset timer
+    SECTION_TIMER="$(date +%s%3N)" # reset timer
 
-echo "running cron reports..."
+    echo "running cron reports..."
 
-cp /etc/crontab .
-sudo find /var/spool/cron/crontabs/ -type f -exec cp "{}" . \;
+    cp /etc/crontab .
+    sudo find /var/spool/cron/crontabs/ -type f -exec cp "{}" . \;
 
-echo "cron $(($(date +%s%3N) - $SECTION_TIMER))" > "$OUTPUTDIR/self-meta/duration"
+    echo "cron $(($(date +%s%3N) - $SECTION_TIMER))" > "$OUTPUTDIR/self-meta/duration"
 
-echo "finished cron reports"
+    echo "finished cron reports"
+fi
 
 # appdata reports
-cd "$OUTPUTDIR/appdata"
+if [[ "$RUN" == "all" || "$RUN" == *"appdata"* ]]; then
+    cd "$OUTPUTDIR/appdata"
 
-SECTION_TIMER="$(date +%s%3N)" # reset timer
+    SECTION_TIMER="$(date +%s%3N)" # reset timer
 
-echo "running appdata reports..."
+    echo "running appdata reports..."
 
-tree -alnsDF /mnt/appdata -o "files.tree"
+    tree -alnsDF /mnt/appdata -o "files.tree"
 
-sudo docker ps -a -s > "docker_ps_-a_-s.log"
-sudo docker inspect $(docker ps -q) > "docker_inspect_(docker_ps_-q).log"
+    sudo docker ps -a -s > "docker_ps_-a_-s.log"
+    sudo docker inspect $(docker ps -q) > "docker_inspect_(docker_ps_-q).log"
 
-echo "appdata $(($(date +%s%3N) - $SECTION_TIMER))" >> "$OUTPUTDIR/self-meta/duration"
+    echo "appdata $(($(date +%s%3N) - $SECTION_TIMER))" >> "$OUTPUTDIR/self-meta/duration"
 
-echo "finished appdata reports"
+    echo "finished appdata reports"
+fi
 
 # media reports
-cd "$OUTPUTDIR/media"
+if [[ "$RUN" == "all" || "$RUN" == *"media"* ]]; then
+    cd "$OUTPUTDIR/media"
 
-SECTION_TIMER="$(date +%s%3N)" # reset timer
+    SECTION_TIMER="$(date +%s%3N)" # reset timer
 
-echo "running media reports..."
+    echo "running media reports..."
 
-tree -alnsDF -I "xrated" /mnt/media -o "files.tree"
+    tree -alnsDF -I "xrated" /mnt/media -o "files.tree"
 
-echo "media $(($(date +%s%3N) - $SECTION_TIMER))" >> "$OUTPUTDIR/self-meta/duration"
+    echo "media $(($(date +%s%3N) - $SECTION_TIMER))" >> "$OUTPUTDIR/self-meta/duration"
 
-echo "finished media reports"
+    echo "finished media reports"
+fi
 
 # self-meta reports
-cd "$OUTPUTDIR/self-meta"
+if [[ "$RUN" == "all" || "$RUN" == *"self-meta"* ]]; then
+    cd "$OUTPUTDIR/self-meta"
 
-echo "running self-meta reports..."
+    echo "running self-meta reports..."
 
-echo "$(($(date +%s%3N) - $TIMER))" > "duration"
+    echo "$(hostname) $(($(date +%s%3N) - $TIMER))" >> "duration"
 
-echo "finished self-meta reports"
+    echo "finished self-meta reports"
+fi
 
 # HTML
 cd "$OUTPUTDIR/"
