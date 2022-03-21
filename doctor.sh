@@ -69,7 +69,7 @@ if [[ "$RUN" == "all" || "$RUN" == *"meta"* ]]; then
     date > "date"
     echo "$0" > "path"
     uname -a > "system"
-    hostname > "hostname"
+    hostname --long > "hostname"
     hostname -I > "ip"
 
     echo "meta $(($(date +%s%3N) - $SECTION_TIMER))" >> "$OUTPUTDIR/self-meta/duration"
@@ -132,7 +132,7 @@ if [[ "$RUN" == "all" || "$RUN" == *"self-meta"* ]]; then
 
     echo "running self-meta reports..."
 
-    echo "$(hostname) $(($(date +%s%3N) - $TIMER))" >> "duration"
+    echo "$(hostname --long) $(($(date +%s%3N) - $TIMER))" >> "duration"
 
     echo "finished self-meta reports"
 fi
