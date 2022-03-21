@@ -1,5 +1,7 @@
 #!/bin/sh
 
+TIMER="$(date +%s%3N)"
+
 # check required dependencies are installed
 
 dep_installed()
@@ -43,10 +45,12 @@ BASEDIR="${BASEDIR:=$HOME/sbone-doctor}"
 OUTPUTDIR="${OUTPUTDIR:=$BASEDIR/$STAMP}"
 
 mkdir -p "$OUTPUTDIR" && cd $OUTPUTDIR
-mkdir meta; mkdir cron; mkdir appdata; mkdir media
+mkdir meta; mkdir cron; mkdir appdata; mkdir media; mkdir self-meta
 
 # meta reports
 cd "$OUTPUTDIR/meta"
+
+SECTION_TIMER="$(date +%s%3N%3N)" # reset timer
 
 echo "running meta reports (date, path, system, hostname, ip)..."
 
@@ -56,20 +60,28 @@ uname -a > "system"
 hostname > "hostname"
 hostname -I > "ip"
 
+echo "meta $(($(date +%s%3N) - $SECTION_TIMER))" > "$OUTPUTDIR/self-meta/duration"
+
 echo "finished meta reports"
 
 # cron reports
 cd "$OUTPUTDIR/cron"
+
+SECTION_TIMER="$(date +%s%3N%3N)" # reset timer
 
 echo "running cron reports..."
 
 cp /etc/crontab .
 sudo find /var/spool/cron/crontabs/ -type f -exec cp "{}" . \;
 
+echo "cron $(($(date +%s%3N) - $SECTION_TIMER))" > "$OUTPUTDIR/self-meta/duration"
+
 echo "finished cron reports"
 
 # appdata reports
 cd "$OUTPUTDIR/appdata"
+
+SECTION_TIMER="$(date +%s%3N%3N)" # reset timer
 
 echo "running appdata reports..."
 
@@ -78,16 +90,31 @@ tree -alnsDF /mnt/appdata -o "files.tree"
 sudo docker ps -a -s > "docker_ps_-a_-s.log"
 sudo docker inspect $(docker ps -q) > "docker_inspect_(docker_ps_-q).log"
 
+echo "appdata $(($(date +%s%3N) - $SECTION_TIMER))" >> "$OUTPUTDIR/self-meta/duration"
+
 echo "finished appdata reports"
 
 # media reports
 cd "$OUTPUTDIR/media"
 
+
+
 echo "running media reports..."
 
 tree -alnsDF -I "xrated" /mnt/media -o "files.tree"
 
+echo "media $(($(date +%s%3N) - $SECTION_TIMER))" >> "$OUTPUTDIR/self-meta/duration"
+
 echo "finished media reports"
+
+# self-meta reports
+cd "$OUTPUTDIR/self-meta"
+
+echo "running self-meta reports..."
+
+echo "$(($(date +%s%3N) - $TIMER))" > "duration"
+
+echo "finished self-meta reports"
 
 # HTML
 cd "$OUTPUTDIR/"
