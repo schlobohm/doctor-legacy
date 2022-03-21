@@ -97,7 +97,7 @@ echo "finished appdata reports"
 # media reports
 cd "$OUTPUTDIR/media"
 
-
+SECTION_TIMER="$(date +%s%3N%3N)" # reset timer
 
 echo "running media reports..."
 
